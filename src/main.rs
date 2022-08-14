@@ -1,3 +1,4 @@
+use std::ops::Add;
 // fn test_func() {
 //     println!("Hello from test func!");
 // }
@@ -10,10 +11,21 @@
 //     x + y // to return something don't put semicolon at then end.
 // }
 
-// struct Point {
-//     x: f64,
-//     y: f64,
-// }
+struct Point {
+    x: f64,
+    y: f64,
+}
+
+impl Add for Point {
+    type Output = Point;
+
+    fn add(self, rhs: Self) -> Self::Output {
+        Point {
+            x: self.x + rhs.x,
+            y: self.y + rhs.y,
+        }
+    }
+}
 
 // struct Line {
 //     start: Point,
@@ -110,8 +122,10 @@ fn main() {
     // multiply_int(10, 50);
     // println!("the sum of 100 and 200 is {}", return_sum(200, 100));
 
-    // let p1: Point = Point { x: 0f64, y: 0f64 };
-    // let p2: Point = Point { x: 20f64, y: 20f64 };
+    let p1: Point = Point { x: 10f64, y: 10f64 };
+    let p2: Point = Point { x: 20f64, y: 20f64 };
+    let p3: Point = p1 + p2;
+    println!("({}, {})", p3.x, p3.y);
 
     // let line: Line = Line { start: p1, end: p2 };
 
