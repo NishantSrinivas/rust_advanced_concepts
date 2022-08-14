@@ -28,80 +28,81 @@
 //     }
 // }
 
-trait Animal
-{
-    fn create(_name:String) -> Self;
+trait Animal {
+    fn create(_name: String) -> Self;
     fn say_name(&self);
-    fn talk(&self) 
-    {
+    fn talk(&self) {
         println!("cannot talk!");
     }
 }
 
-trait Summable<T>
-{
+trait Summable<T> {
     fn sum(&self) -> T;
 }
 
-impl Summable<u32> for Vec<u32>
-{
-    fn sum(&self) -> u32
-    {
-        let mut sum:u32 = 0;
-        for i in self
-        {
+impl Summable<u32> for Vec<u32> {
+    fn sum(&self) -> u32 {
+        let mut sum: u32 = 0;
+        for i in self {
             sum += i;
         }
         sum
     }
 }
 
-struct Human
-{
-    name: String
+struct Human {
+    name: String,
 }
 
-struct Cat
-{
-    name: String
+struct Cat {
+    name: String,
 }
 
-impl Animal for Human
-{
-    fn create(_name:String) -> Human
-    {
-        Human{name:_name}
+impl Animal for Human {
+    fn create(_name: String) -> Human {
+        Human { name: _name }
     }
 
-    fn say_name(&self)
-    {
-        println!("Hello, my name is {}",self.name);
+    fn say_name(&self) {
+        println!("Hello, my name is {}", self.name);
     }
 
-    fn talk(&self)
-    {
-        println!("{}: let's talk!!",self.name);
+    fn talk(&self) {
+        println!("{}: let's talk!!", self.name);
     }
 }
 
-impl Animal for Cat
-{
-    fn create(_name:String) -> Cat
-    {
-        Cat{name:_name}
+impl Animal for Cat {
+    fn create(_name: String) -> Cat {
+        Cat { name: _name }
     }
 
-    fn say_name(&self)
-    {
-        println!("Cat's name is {}",self.name);
+    fn say_name(&self) {
+        println!("Cat's name is {}", self.name);
     }
 }
 
 // fn give_info(object: impl Animal)
 // fn give_info<T: Animal>(object: T)
-fn give_info<T>(object: T) where T: Animal
+fn give_info<T>(object: T)
+where
+    T: Animal,
 {
     object.say_name();
+}
+
+struct Person {
+    name: String,
+}
+
+impl Person {
+    // fn new<T: Into<String>> (name: T) -> Person
+    fn new<T>(name: T) -> Person
+    where
+        T: Into<String>,
+    {
+        Person { name: name.into() }
+    }
 }
 
 fn main() {
@@ -129,17 +130,20 @@ fn main() {
     // Traits
 
     // let person1:Human = Human{name:"nishant".to_string()};
-    let person1:Human = Human::create("nishant".to_string());
+    let person1: Human = Human::create("nishant".to_string());
     person1.say_name();
     person1.talk();
 
     // let cat1:Cat = Cat{name:"kitty".to_string()};
-    let cat1:Cat = Cat::create("kitty".to_string());
+    let cat1: Cat = Cat::create("kitty".to_string());
     cat1.say_name();
     cat1.talk();
 
-    let some_nums = vec![1,2,3,4,5,6,7,8,9,10];
-    println!("sum of some_nums is {}",some_nums.sum());
+    let some_nums = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    println!("sum of some_nums is {}", some_nums.sum());
 
     give_info(person1);
+
+    let p1: Person = Person::new("Tony");
+    println!("p1 name: {}", p1.name);
 }
