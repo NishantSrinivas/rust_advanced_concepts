@@ -151,6 +151,19 @@ fn print_it_dynamic(x: &dyn Printable) {
     println!("{}", x.format());
 }
 
+struct Car<'a> // specifying lifetime <'a>
+{
+    name: &'a str // 'a
+}
+
+impl<'a> Car<'a>
+{
+    fn name(&self)
+    {
+        println!("This is a {} car.",self.name);
+    }
+}
+
 fn main() {
     // test_func();
     // multiply_int(10, 50);
@@ -226,4 +239,14 @@ fn main() {
     for animal in animals.iter() {
         animal.say_name();
     }
+
+    // Lifetime in Structs impl
+    let new_car: Car = Car{name:"BMW"};
+    new_car.name();
 }
+
+// Reference count variables
+// use std::rc::Rc
+// name: string -> name: Rc<String>
+// "name".to_string(); -> Rc::new("name".to_string());
+// to get referenc count Rc::strong_refernce(&name)
