@@ -1,3 +1,5 @@
+use std::thread;
+// use std::sync::{Mutex, Arc};
 // use std::ops::Add;
 // fn test_func() {
 //     println!("Hello from test func!");
@@ -40,15 +42,15 @@
 //     }
 // }
 
-trait Animal {
-    fn create(_name: String) -> Self
-    where
-        Self: Sized;
-    fn say_name(&self);
-    fn talk(&self) {
-        println!("cannot talk!");
-    }
-}
+// trait Animal {
+//     fn create(_name: String) -> Self
+//     where
+//         Self: Sized;
+//     fn say_name(&self);
+//     fn talk(&self) {
+//         println!("cannot talk!");
+//     }
+// }
 
 // trait Summable<T> {
 //     fn sum(&self) -> T;
@@ -64,37 +66,37 @@ trait Animal {
 //     }
 // }
 
-struct Human {
-    name: String,
-}
+// struct Human {
+//     name: String,
+// }
 
-struct Cat {
-    name: String,
-}
+// struct Cat {
+//     name: String,
+// }
 
-impl Animal for Human {
-    fn create(_name: String) -> Human {
-        Human { name: _name }
-    }
+// impl Animal for Human {
+//     fn create(_name: String) -> Human {
+//         Human { name: _name }
+//     }
 
-    fn say_name(&self) {
-        println!("Hello, my name is {}", self.name);
-    }
+//     fn say_name(&self) {
+//         println!("Hello, my name is {}", self.name);
+//     }
 
-    fn talk(&self) {
-        println!("{}: let's talk!!", self.name);
-    }
-}
+//     fn talk(&self) {
+//         println!("{}: let's talk!!", self.name);
+//     }
+// }
 
-impl Animal for Cat {
-    fn create(_name: String) -> Cat {
-        Cat { name: _name }
-    }
+// impl Animal for Cat {
+//     fn create(_name: String) -> Cat {
+//         Cat { name: _name }
+//     }
 
-    fn say_name(&self) {
-        println!("Cat's name is {}", self.name);
-    }
-}
+//     fn say_name(&self) {
+//         println!("Cat's name is {}", self.name);
+//     }
+// }
 
 // fn give_info(object: impl Animal)
 // fn give_info<T: Animal>(object: T)
@@ -119,48 +121,74 @@ impl Animal for Cat {
 //     }
 // }
 
-fn take_a_string(ss: String) {
-    println!("{}", ss);
+// fn take_a_string(ss: String) {
+//     println!("{}", ss);
+// }
+
+// fn borrow_a_string(ss: &String) {
+//     println!("{}", ss);
+// }
+
+// trait Printable {
+//     fn format(&self) -> String;
+// }
+
+// impl Printable for u32 {
+//     fn format(&self) -> String {
+//         format!("u32 : {}", *self)
+//     }
+// }
+
+// impl Printable for String {
+//     fn format(&self) -> String {
+//         format!("String : {}", *self)
+//     }
+// }
+
+// fn print_it<T: Printable>(x: T) {
+//     println!("{}", x.format());
+// }
+
+// fn print_it_dynamic(x: &dyn Printable) {
+//     println!("{}", x.format());
+// }
+
+// struct Car<'a> // specifying lifetime <'a>
+// {
+//     name: &'a str // 'a
+// }
+
+// impl<'a> Car<'a>
+// {
+//     fn name(&self)
+//     {
+//         println!("This is a {} car.",self.name);
+//     }
+// }
+
+struct Account {
+    balance: u64,
 }
 
-fn borrow_a_string(ss: &String) {
-    println!("{}", ss);
-}
-
-trait Printable {
-    fn format(&self) -> String;
-}
-
-impl Printable for u32 {
-    fn format(&self) -> String {
-        format!("u32 : {}", *self)
+impl Account {
+    fn new() -> Account {
+        Account { balance: 0 }
     }
-}
 
-impl Printable for String {
-    fn format(&self) -> String {
-        format!("String : {}", *self)
+    fn deposit(&mut self, amount: u64) {
+        self.balance += amount;
     }
-}
 
-fn print_it<T: Printable>(x: T) {
-    println!("{}", x.format());
-}
+    fn withdraw(&mut self, amount: u64) {
+        if self.balance >= amount {
+            self.balance -= amount;
+        } else {
+            println!("Sorry op can't be performed, not enough balance");
+        }
+    }
 
-fn print_it_dynamic(x: &dyn Printable) {
-    println!("{}", x.format());
-}
-
-struct Car<'a> // specifying lifetime <'a>
-{
-    name: &'a str // 'a
-}
-
-impl<'a> Car<'a>
-{
-    fn name(&self)
-    {
-        println!("This is a {} car.",self.name);
+    fn enquire_balance(&self) {
+        println!("available balance: {}", self.balance);
     }
 }
 
@@ -208,41 +236,65 @@ fn main() {
     // let p1: Person = Person::new("Tony");
     // println!("p1 name: {}", p1.name);
 
-    let my_string: String = "test string".to_string();
-    let my_new_string: String = String::from("new test string");
+    // let my_string: String = "test string".to_string();
+    // let my_new_string: String = String::from("new test string");
     // my_string = "test string".to_string();
 
-    println!("{}", my_string);
-    take_a_string(my_string);
+    // println!("{}", my_string);
+    // take_a_string(my_string);
     // println!("{}",my_string); // problem as take a string takes away my string!
 
-    println!("{}", my_new_string);
-    borrow_a_string(&my_new_string);
+    // println!("{}", my_new_string);
+    // borrow_a_string(&my_new_string);
     // println!("{}",my_new_string); // no problem as borrow a string doesn't take ownership
 
-    let x: u32 = 100;
-    let xstr: String = String::from("test string");
+    // let x: u32 = 100;
+    // let xstr: String = String::from("test string");
     // println!("{}",x.format());
-    print_it(x);
+    // print_it(x);
     // print_it(xstr);
 
-    print_it_dynamic(&x);
-    print_it_dynamic(&xstr);
+    // print_it_dynamic(&x);
+    // print_it_dynamic(&xstr);
 
     // vector of Animals
-    let mut animals: Vec<Box<dyn Animal>> = Vec::new();
+    // let mut animals: Vec<Box<dyn Animal>> = Vec::new();
     // let person1: Human = Human::create("nishant".to_string());
     // let cat1: Cat = Cat::create("kitty".to_string());
-    animals.push(Box::new(Human::create("nishant".to_string())));
-    animals.push(Box::new(Cat::create("kitty".to_string())));
+    // animals.push(Box::new(Human::create("nishant".to_string())));
+    // animals.push(Box::new(Cat::create("kitty".to_string())));
 
-    for animal in animals.iter() {
-        animal.say_name();
-    }
+    // for animal in animals.iter() {
+    //     animal.say_name();
+    // }
 
     // Lifetime in Structs impl
-    let new_car: Car = Car{name:"BMW"};
-    new_car.name();
+    // let new_car: Car = Car{name:"BMW"};
+    // new_car.name();
+
+    let mut acc: Account = Account::new();
+    acc.deposit(500);
+
+    let thr = thread::spawn(move || {
+        let mut x: u8 = 0;
+        while x < 10 {
+            acc.withdraw(50);
+            acc.enquire_balance();
+            x += 1;
+        }
+    });
+
+    let thr2 = thread::spawn(move || {
+        let mut x: u8 = 0;
+        while x < 10 {
+            println!("hello");
+            x += 1;
+        }
+    });
+
+    thr.join().unwrap();
+    thr2.join().unwrap();
+    // acc.enquire_balance();
 }
 
 // Reference count variables
